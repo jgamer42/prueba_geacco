@@ -11,20 +11,39 @@ services:
       MYSQL_PASSWORD: ${GEACCO_PASSWORD}
     ports:
       - "3306:3306"
+    expose:
+      - "3306"
     volumes:
       - ./data:/var/lib/mysql
-
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: 'rabbitmq'
     ports:
-        - 5672:5672
-        - 15672:15672
+        - "5672"
+        - "15672"
     volumes:
         - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
         - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
-    networks:
-        - rabbitmq_go_net  
-networks:
-  rabbitmq_go_net:
-    driver: bridge
+  app:
+    build:
+      context: .
+      dockerfile: ./src/Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    links:
+      - "db:db"
+  scheduler:
+    build:
+      context: .
+      dockerfile: ./src/Dockerfile
+    command: celery -A src beat -l debug --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    links:
+      - "db:db"
+  worker:
+    build:
+      context: .
+      dockerfile: ./src/Dockerfile
+    command: celery -A src worker --loglevel=debug
+    links:
+      - "db:db"

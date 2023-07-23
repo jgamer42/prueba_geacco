@@ -1,6 +1,21 @@
 DOCUMENT_TYPES = (
-    ("PDF","PDF"),("DOCX","DOCX"),("XLSX","XLSX"),("PLAIN","PLAIN")
+    ('PDF', 'PDF'), ('DOCX', 'DOCX'), ('XLSX', 'XLSX'), ('PLAIN', 'PLAIN')
 )
 PLAIN_DOCUMENT_TYPES = [
-    "PDF","DOCX","PLAIN"
+    'PDF', 'DOCX', 'PLAIN', 'XLSX'
 ]
+PLAIN_TEXT = 'PLAIN'
+PDF = 'PDF',
+WORD = 'DOCX'
+EXCELL = 'XLSX'
+
+TASK_TYPES = (
+    ('GENERATE', 'GENERATE'), ('FILL', 'FILL')
+)
+
+PLAIN_TASK_TYPES = [
+    'GENERATE', 'FILL'
+]
+
+TASK_GENERATE = 'GENERATE'
+TASK_FILL = 'FILL'

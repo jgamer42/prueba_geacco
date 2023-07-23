@@ -27,8 +27,7 @@ SECRET_KEY = 'django-insecure-@_b2s-#d)g5d_#jfz@ub-$93jmnb2v076fl^zdndm&co)&5kn$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -41,8 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_celery_beat',
-    'django_celery_results',
-    "documents"
+    'documents',
+    'tasks'
 ]
 
 MIDDLEWARE = [
@@ -83,11 +82,11 @@ WSGI_APPLICATION = 'src.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ["GEACCO_DATABASE"],
-        'USER': os.environ["GEACCO_USER"],
-        'PASSWORD': os.environ["GEACCO_PASSWORD"],
-        'HOST':os.environ["GEACCO_DB_HOST"],
-        'PORT':'3306',
+        'NAME': os.environ['GEACCO_DATABASE'],
+        'USER': os.environ['GEACCO_USER'],
+        'PASSWORD': os.environ['GEACCO_PASSWORD'],
+        'HOST': 'db',
+        'PORT': '3306',
     }
 }
 
@@ -133,10 +132,13 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#Celery configs 
-BROKER_URL = 'amqp://guest:guest@127.0.0.1:5672'
+# Celery configs
+BROKER_URL = 'amqp://guest:guest@rabbitmq:5672'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
-CELERY_RESULT_BACKEND = f'db+mysql://{os.environ["GEACCO_USER"]}:{os.environ["GEACCO_PASSWORD"]}@{os.environ["GEACCO_DB_HOST"]}/{os.environ["GEACCO_DATABASE"]}'
+CELERY_RESULT_BACKEND = 'rpc://'
+FILE_UPLOAD_HANDLERS = [
+    'django.core.files.uploadhandler.TemporaryFileUploadHandler',
+]
