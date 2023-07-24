@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-@_b2s-#d)g5d_#jfz@ub-$93jmnb2v076fl^zdndm&co)&5kn$'
+SECRET_KEY = os.environ['DJANGO_APP_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -85,7 +85,7 @@ DATABASES = {
         'NAME': os.environ['GEACCO_DATABASE'],
         'USER': os.environ['GEACCO_USER'],
         'PASSWORD': os.environ['GEACCO_PASSWORD'],
-        'HOST': 'db',
+        'HOST': os.environ.get('GEACCO_DB_HOST', 'db'),
         'PORT': '3306',
     }
 }
@@ -133,7 +133,8 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Celery configs
-BROKER_URL = 'amqp://guest:guest@rabbitmq:5672'
+RABBIT_HOST = os.environ.get('GEACCO_RABBIT_HOS', 'rabbitmq')
+BROKER_URL = f'amqp://guest:guest@{RABBIT_HOST}:5672'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'

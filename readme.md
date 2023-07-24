@@ -6,6 +6,48 @@
 
 ## installation
 
+This Application is fully dockerized so just need to have a docker and run, to install docker check [this doc](https://www.docker.com/)
+```sh
+docker-compose up
+```
+
+and it should works
+
+### first time running
+When you run for the first time you will need to make migrations
+to do that make this steps
+```sh
+docker-compose up
+docker-compose run app python manage.py migrate
+```
+and that should be enough
+
+### Running without docker
+you will need these dependencies
+- [rabbitMq](https://www.rabbitmq.com/)
+- [mysql](https://www.mysql.com/)
+- [python](https://www.python.org/)
+
+then run following commands
+```sh
+python3 -m venv env
+source env/bin/activate
+pip install -r requirements.txt
+cd src
+python manage.py migrate
+python manage.py runserver
+```
+in another terminal start the scheduler
+```sh
+cd src
+celery -A src beat -l debug --scheduler django_celery_beat.schedulers:DatabaseScheduler
+```
+
+in another terminal start the worker
+```sh
+cd src
+celery -A src worker --loglevel=debug
+```
 ## Domain concepts
 
 - User: Anyone that hits the API , there is no restriction of any kind
