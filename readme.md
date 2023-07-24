@@ -55,7 +55,7 @@ celery -A src worker --loglevel=debug
 - Task: An specific process to do over a document format
 - pipeline: An ordered list of task to do over a document format
 ## API
-For quick test of this code here [postman collection](doc/postmant_collection.json) that you can import to postman, also here is a [tutorial](https://learning.postman.com/docs/collections/using-collections) about how to do it
+For quick test of this code here [postman collection](doc/postman_collection.json) that you can import to postman, also here is a [tutorial](https://learning.postman.com/docs/collections/using-collections) about how to do it
 ### Database
 ![Database](doc/model.png)
 ### Queue and scheduling
