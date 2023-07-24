@@ -1,5 +1,5 @@
 from django.db import models
-from src.constanst import DOCUMENT_TYPES
+from src.constants import DOCUMENT_TYPES
 
 
 class DocumentFormat(models.Model):

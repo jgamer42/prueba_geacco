@@ -1,0 +1,200 @@
+{
+	"info": {
+		"_postman_id": "2275e750-eed7-467a-a7d9-8acfb6d2823b",
+		"name": "geacco",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12207965"
+	},
+	"item": [
+		{
+			"name": "create_documents (JSON)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"format\":\"Se remite a Sr(a) {{nombre}} la disposición de presentarse en la entidad {{entidad}} con su vehículo de placa {{placa}}.\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/documents/create/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"documents",
+						"create",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create_documents (FORM DATA)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "format",
+							"type": "file",
+							"src": "/C:/Users/57314/Desktop/pruebas.xlsx"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/documents/create/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"documents",
+						"create",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get sepecific document",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/documents/5",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"documents",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all documents",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/documents",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"documents"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "schedule",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"document_format\":5,\r\n    \"steps\":[\r\n        {\r\n            \"start\":{\r\n                \"minutes\":2\r\n            },\r\n            \"type\":\"FILL\",\r\n            \"payload\":{\r\n                \"nombre\":\"juan\",\r\n                \"entidad\":\"qqq\",\r\n                \"placa\":\"eqwe\"\r\n            }\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/task/schedule/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"task",
+						"schedule",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fill file",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nombre\":\"juan perez\",\r\n    \"entidad\":\"caldas\",\r\n    \"placa\":\"reeq\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/documents/fill/5",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"documents",
+						"fill",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get pipeline result",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/task/result/15",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"task",
+						"result",
+						"15"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get step result",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/task/result/15/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"task",
+						"result",
+						"15",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

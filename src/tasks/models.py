@@ -1,6 +1,6 @@
 from django_celery_beat.models import PeriodicTask
 from django.db import models
-from src.constanst import TASK_TYPES
+from src.constants import TASK_TYPES
 from documents.models import DocumentFormat
 
 

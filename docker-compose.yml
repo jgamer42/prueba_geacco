@@ -1,5 +1,4 @@
 version: '3.8'
-
 services:
   db:
     image: mysql:8.0
@@ -33,6 +32,10 @@ services:
       - "8000:8000"
     links:
       - "db:db"
+    depends_on:
+      - db
+    volumes:
+      - ./files:/app/files
   scheduler:
     build:
       context: .
@@ -40,6 +43,9 @@ services:
     command: celery -A src beat -l debug --scheduler django_celery_beat.schedulers:DatabaseScheduler
     links:
       - "db:db"
+    depends_on:
+      - db
+      - rabbitmq
   worker:
     build:
       context: .
@@ -47,3 +53,8 @@ services:
     command: celery -A src worker --loglevel=debug
     links:
       - "db:db"
+    depends_on:
+      - db
+      - rabbitmq
+    volumes:
+      - ./files:/app/files

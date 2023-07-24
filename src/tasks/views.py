@@ -2,17 +2,33 @@ from django.http import JsonResponse
 import datetime
 from datetime import timedelta
 from django_celery_beat.models import PeriodicTask, CrontabSchedule
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView
 from tasks.models import TaskPipeline, DomainTask, ListTasks
 from documents.models import DocumentFormat
-from django.http.response import JsonResponse
+from django.http.response import JsonResponse, FileResponse
 from django.shortcuts import get_object_or_404
 from tasks.validators import task_validator
 from http import HTTPStatus
 from django.db import transaction
+import mimetypes
+from django.utils import timezone
 
 
-class TaskView(CreateAPIView):
+class TaskView(CreateAPIView, RetrieveAPIView):
+    model = TaskPipeline
+    queryset = TaskPipeline.objects.all()
+
+    def get(self, request, pk):
+        document = self.get_object()
+        now = timezone.now()
+        if now < document.end_at:
+            return JsonResponse({'message': 'your document still processing'})
+        mime_type, _ = mimetypes.guess_type(document.output_file.path)
+        return FileResponse(open(document.output_file.path, 'rb'), headers={
+            'Content-Type': mime_type,
+            'Content-Disposition': f'attachment; filename="{document.output_file.name}'
+        })
+
     @transaction.atomic
     def post(self, request):
         last_step_date = datetime.datetime.now()
@@ -40,7 +56,7 @@ class TaskView(CreateAPIView):
             new_task = DomainTask(task_type=step['type'], document=doc_format, document_information=step.get(
                 'payload'), start_at=date_formatted)
             new_step = ListTasks(step=i, task=new_task, pipeline=new_pipeline)
-            if i >= len(payload['steps']):
+            if i == len(payload['steps'])-1:
                 new_step.is_last = True
             new_task.save()
             new_celery_task, _ = PeriodicTask.objects.update_or_create(
@@ -61,4 +77,15 @@ class TaskView(CreateAPIView):
         new_pipeline.first_step = tasks_to_save[0]
         new_pipeline.save()
         ListTasks.objects.bulk_create(steps_to_save)
-        return JsonResponse({'message': 'task scheduled'})
+        return JsonResponse({'message': f'task scheduled with id {new_pipeline.id}'})
+
+
+class StepView(RetrieveAPIView):
+    def get(self, request, pipeline_id, step):
+        pipeline = get_object_or_404(TaskPipeline, id=pipeline_id)
+        target = get_object_or_404(ListTasks, step=step-1, pipeline=pipeline)
+        mime_type, _ = mimetypes.guess_type(target.task.output_file.path)
+        return FileResponse(open(target.task.output_file.path, 'rb'), headers={
+            'Content-Type': mime_type,
+            'Content-Disposition': f'attachment; filename="{target.task.output_file.name}'
+        })

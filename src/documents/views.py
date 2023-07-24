@@ -1,14 +1,13 @@
 import re
 from io import BytesIO
 from documents.helpers import handle_file, write_file
-from src.constanst import PLAIN_DOCUMENT_TYPES, PDF, WORD, EXCELL, PLAIN_TEXT
+from src.constants import PLAIN_DOCUMENT_TYPES, PDF, WORD, EXCELL, PLAIN_TEXT
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView
-from django.http import JsonResponse
+from django.http import JsonResponse, FileResponse
 from documents.models import DocumentFormat
 from django.http.response import HttpResponseBadRequest
 from documents.serializers import DocumentFormatSerializer
 from rest_framework.pagination import PageNumberPagination
-from django.http import FileResponse
 import mimetypes
 
 

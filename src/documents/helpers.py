@@ -4,6 +4,7 @@ import docx
 import fitz
 import re
 from io import BytesIO, StringIO
+from src.constants import PDF, PLAIN_TEXT, WORD, EXCELL
 
 
 def handle_pdf(file):
@@ -31,11 +32,11 @@ def handle_excel(file):
 
 
 def handle_file(file, file_type):
-    if file_type == 'PDF':
+    if file_type == PDF:
         return handle_pdf(file)
-    elif file_type == 'XLSX':
+    elif file_type == EXCELL:
         return handle_excel(file)
-    elif file_type == 'DOCX':
+    elif file_type == WORD:
         return handle_docx(file)
     else:
         return ''
@@ -102,11 +103,11 @@ def handle_write_docx(file, payload):
 
 
 def write_file(file, file_type, payload):
-    if file_type == 'PDF':
+    if file_type == PDF:
         return handle_write_pdf(file, payload)
-    elif file_type == 'XLSX':
+    elif file_type == EXCELL:
         return handle_write_excel(file, payload)
-    elif file_type == 'DOCX':
+    elif file_type == WORD:
         return handle_write_docx(file, payload)
     else:
         output = ''

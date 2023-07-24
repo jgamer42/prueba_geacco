@@ -1,4 +1,4 @@
-from src.constanst import PLAIN_TASK_TYPES
+from src.constants import PLAIN_TASK_TYPES
 from cerberus import Validator
 steps_schema = {
     'start': {'type': 'dict', 'required': True, 'schema': {
